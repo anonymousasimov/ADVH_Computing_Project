@@ -1,0 +1,10 @@
+1 calculates force
+2 calcs total F
+3 calcs v
+4 calcs d
+5 moves planet
+
+1.1 calcs dx dy
+1.2 calcs r
+1.3 calcs F
+1.4 calcs vectors

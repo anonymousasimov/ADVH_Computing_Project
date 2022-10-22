@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+        
+    <title>Orbits | Home</title>
+    <link rel="stylesheet" href="../CSS/Style.css">
+    
+    <!-- loads required Scripts -->
+    <script src="..//Javascript/simulate.js"></script>
+    <script src="..//Javascript/load&save.js"></script>
+    <script src="..//Javascript/new_object.js"></script>
+    <script src="..//Javascript/general.js"></script>
+
+    <script>
+        //Warns the user when leaving the webpage
+        window.onbeforeunload = function(){return''};
+        
+        //Changes canvas to fullscreen
+        function fullscreen(){
+            reset();
+            ctx = document.getElementById("canvas");
+            ctx.height = 800;
+            ctx.width = 800;
+            display("fs", "none");
+            display("mini", "block");
+        }
+
+        //Reverts canvas size to origonal
+        function minimise(){
+            reset()
+            ctx = document.getElementById("canvas");
+            ctx.height = 600;
+            ctx.width = 600;
+            display("fs", "block");
+            display("mini", "none");
+        }
+    </script>
+<!--
+name str
+mass kg (*10**24)
+posx,posy m (*10**9)
+vx,vy ms^-1
+color str
+trail toggle boolean
+-->
+    
+<storage id="CurrentSystem">sun,1988500,0,0,0,0,yellow,false
+earth,5.9724,149.596,0,0,29.783,blue,true
+mars,0.64171,-227.923,0,0,-21.97,orange,true
+venus,4.8675,-108.2,0,0,-35.0,tan,true
+mercury,0.33,57.9,0,0,47.4,red,true</storage>
+
+<storage id="Systems">Binary example$StarA,1988500,150,0,0,15,yellow,true
+StarB,1988500,-150,0,0,-15,gold,true$Sol$sun,1988500,0,0,0,0,yellow,false
+earth,5.9724,149.596,0,0,29.783,blue,true
+mars,0.64171,-227.923,0,0,-21.97,orange,true
+venus,4.8675,-108.2,0,0,-35.0,tan,true
+mercury,0.33,57.9,0,0,47.4,red,true$Luyten's Star$Luyten's Star,517002,0,0,0,0,red,false
+b,17.26,13.46,0,0,53.449,cyan,true
+d,64.5,106.514,0,0,4.879,olive,true
+e,55.54,-127,0,0,-5.258,brown,true$Barnard's Star$Barnard's Star,286340,0,0,0,0,red,false
+b,19.3,60.4,0,0,17.78,cyan,true$Tau Ceti$Tau Ceti,1556972,0,0,0,0,yellow,false
+b,11.95,15.7,0,0,81.31,brown,true
+g,10.45,20,0,0,72,maroon,true
+c,18.51,29,0,0,59.67,orange,true
+h,10.93,36.35,0,0,53.45,blue,true
+d,21.5,55.95,0,0,43,teal,true
+e,23.47,80.48,0,0,35.92,white,true
+f,23.47,199.56,0,0,22.81,navy,true$Proxima Centauri$Proxima Centauri,242792,0,0,0,0,red,false
+d,1.73,4.19,0,0,62.19,brown,true
+b,9.56,0.287,0,0,47.5,cyan,true
+c,41.49,222.75,0,0,8.53,Navy,true</storage>
+    
+<storage id="status">running</storage>
+        
+</head>
+
+<body>
+    <header>
+        <img src="..//Media/logo.png" width="45px" height="45px" id="logo">
+        <h1>Orbits</h1>
+        <a href="..//HTML/mathspage.html" class="link">More information</a>
+    </header>
+
+    <main>
+        
+        <h1>Gravity simulated</h1><br><br>
+        <p>Below is a basic simulation, centred a round Newton's equation of gravity. For more information on how it works - and an explenation of the physics behind orbiting bodies go to the More information page.
+            <br>The simulation runs when the 'start' button is pressed. To add new objects press the 'Create New' button.<br>
+            The 'Save' button saves the current solar system - including any additions you have made to it.<br>
+            The 'Load' button allows you to load either a pre-made solar system, or one that you have saved previously. A list of pre-made solar systems can be found at the bottom of this page.<br>
+            NOTE: any saved solar systems that you have made will not be kept once you leave this page!<br><br>
+        </p>
+        
+        <canvas id="canvas" width="600px" height="600px"></canvas>
+        
+        <div>
+        <!-- Function buttons -->
+        <button id="run" type="button" onclick="simulate_main()">Start</button>
+        <button id="reset" type="button" onclick="reset()">Reset</button>
+        <button type="button" onclick="new_object()">Create New</button>
+        <button type="button" onclick="display('saveform','block')">Save</button>
+        <button type="button" onclick="display('loadform','block')">Load</button>
+        
+        <!--Resize-->
+        <button id="fs" type="button" onclick="fullscreen()">Full screen</button> 
+        <button id="mini" type="button" onclick="minimise()">Minimise</button> 
+        </div>
+        
+        <textarea readonly id='textoutput'></textarea>
+        
+        <!-- New object form -->
+        <form id="new_object">
+            <p>Name
+            <input type="text" id="name" placeholder="Enter Name"></p>
+            
+            <p>Mass (kg * 10 **24)
+            <input  type="number" id="mass" placeholder="Enter Mass of object"></p>
+        
+            <p>Distance from 0,0 (m * 10 ** 9)
+            <input type="number" id="distance" placeholder="Enter distance"></p>
+            
+            <p>Orbital velocity (km)
+            <input type="number" id="orbital velocity" placeholder="Enter velocity"></p>
+            
+            <p>Color
+            <select id="color">
+                <option value="Blue">Blue</option>
+                <option value="Brown">Brown</option>
+                <option value="Cyan">Cyan</option>
+                <option value="Gold">Gold</option>
+                <option value="Green">Green</option>
+                <option value="Grey">Grey</option>
+                <option value="Lime">Lime</option>
+                <option value="Maroon">Maroon</option>
+                <option value="Navy">Navy</option>
+                <option value="Olive">Olive</option>
+                <option value="Orange">Orange</option>
+                <option value="Pink">Pink</option>
+                <option value="Purple">Purple</option>
+                <option value="Red">Red</option>
+                <option value="Silver">Silver</option>
+                <option value="Tan">Tan</option>
+                <option value="Teal">Teal</option>
+                <option value="White">White</option>
+                <option value="Yellow">Yellow</option>
+                </select></p>
+            No Trail (recommended on)
+            <input type="checkbox" id="trail"><br>
+            <button type="button" class="formbutton" onclick="append_data()" style="clear: both;">Submit</button>
+            <button type="button" class="formbutton" onclick="display('new_object', 'none')">Exit</button>
+        </form>
+        <form id="saveform">
+            Enter a savename.
+            <input id="savename" type="text" placeholder="Enter save name">
+            <button type="button" class="formbutton" style="clear: both;" onclick="save()">Save</button>
+            <button type="button" class="formbutton" onclick="display('saveform', 'none')">Exit</button>
+        </form>
+        <form id="loadform">
+            Enter the name of the system you want to load
+            <input id="searchterm" type="text" placeholder="Enter search term">
+            <button type="button" class="formbutton" onclick="load()" style="clear: both;">load</button>
+            <button type="button" class="formbutton" onclick="display('loadform', 'none')">Exit</button>
+        </form>
+        
+        <p>Pre-made solar system names :</p>
+        
+        <ul>
+            <li>Binary example</li><br>
+            <li>The Solar system</li><br>
+            <li>Luyten's Star</li><br>
+            <li>Barnard's Star</li><br>
+            <li>Tau Ceti</li><br>
+            <li>Proxima Centauri</li><br>
+        </ul>
+    </main>
+    <footer>
+        Thank you for visiting!
+    </footer>
+</body>       
+</html>
